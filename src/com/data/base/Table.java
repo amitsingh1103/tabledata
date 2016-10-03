@@ -13,8 +13,7 @@ public class Table {
     private List<Column> columns;
 
     public Table(Schema schema, List<Object> values) {
-        List<Field> fields = schema.getFields();
-        new Table(fields, values);
+        this(schema.getFields(), values);
     }
 
     private Table(List<Field> fields, List<Object> values) {
@@ -29,11 +28,28 @@ public class Table {
         }
     }
 
+    public boolean addRow(List<Object> values) {
+        if (values != null) {
+            for (int index = 0; index < values.size(); index++) {
+                columns.get(index).addValue(values.get(index));
+            }
+        }
+        return true;
+    }
+
+    public void showTable() {
+        columns.stream().forEach(column -> column.showColumn());
+    }
+
     public static void main(String[] args) {
         Field f1 = new Field("empId", "int", false);
         Field f2 = new Field("empName", "varchar", false);
 
         Schema s1 = new Schema(Arrays.asList(f1, f2));
-        Table t1 = new Table(s1,null);
+        Table t1 = new Table(s1, Arrays.asList("1", "amit"));
+        t1.addRow(Arrays.asList("2","mukesh"));
+        t1.addRow(Arrays.asList("3", null));
+        
+        t1.showTable();
     }
 }
